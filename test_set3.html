@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Evanghelia după Ioan - Set 3</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 3px solid #e67e22;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #d35400;
+            margin-top: 40px;
+            padding: 10px;
+            background-color: #fdf2e9;
+            border-left: 5px solid #e67e22;
+        }
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .question p {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        .reference {
+            color: #e67e22;
+            font-style: italic;
+            font-weight: normal;
+            font-size: 0.95em;
+        }
+        .question label {
+            display: block;
+            padding: 10px 15px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        .question label:hover {
+            background-color: #fdf2e9;
+        }
+        .question input[type="radio"],
+        .question input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .tf-options {
+            display: flex;
+            gap: 20px;
+        }
+        .tf-options label {
+            flex: 1;
+            text-align: center;
+            border: 2px solid #bdc3c7;
+        }
+        .matching-section {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .matching-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            flex-wrap: wrap;
+        }
+        .matching-item .match-text {
+            flex: 1;
+            min-width: 250px;
+        }
+        .matching-item .match-ref {
+            color: #e67e22;
+            font-style: italic;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .matching-item select {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 2px solid #bdc3c7;
+            font-size: 14px;
+        }
+        #submitBtn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+        #submitBtn:hover {
+            background-color: #219a52;
+        }
+        #results {
+            display: none;
+            background: white;
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        #scoreDisplay {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .score-excellent {
+            background-color: #d5f4e6;
+            color: #27ae60;
+        }
+        .score-good {
+            background-color: #fef9e7;
+            color: #f39c12;
+        }
+        .score-needs-work {
+            background-color: #fadbd8;
+            color: #e74c3c;
+        }
+        .answer-review {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+        .answer-correct {
+            background-color: #d5f4e6;
+            border-color: #27ae60;
+        }
+        .answer-incorrect {
+            background-color: #fadbd8;
+            border-color: #e74c3c;
+        }
+        .correct-answer-text {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .your-answer-text {
+            color: #e74c3c;
+        }
+        .result-reference {
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+        .points {
+            color: #95a5a6;
+            font-size: 0.85em;
+            float: right;
+        }
+        #resetBtn {
+            display: none;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        #resetBtn:hover {
+            background-color: #d35400;
+        }
+        .section-score {
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px;
+            background: #fdf2e9;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📖 Test Evanghelia după Ioan - Set 3</h1>
+
+    <form id="quizForm">
+        <!-- SECTION I: TRUE/FALSE -->
+        <h2>I. Adevărat/Fals <span class="points">(2p fiecare)</span></h2>
+
+        <div class="question">
+            <p>1. Dacă nu rămâne cineva în Mine, este aruncat afară, ca mlădița roditoare. <span class="reference">(Ioan 15:6)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_1" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_1" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>2. Neprihănitule Tată, lumea nu Te-a cunoscut, dar Eu Te-am cunoscut și aceștia au cunoscut că Tu M-ai trimis. <span class="reference">(Ioan 17:25)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_2" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_2" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>3. Dacă grăuntele de grâu care a căzut pe pământ moare, rămâne singur. <span class="reference">(Ioan 12:24)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_3" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_3" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>4. Cine caută slava Celui ce l-a trimis, acela este adevărat și în el nu este strâmbătate. <span class="reference">(Ioan 7:18)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_4" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_4" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>5. Voia Tatălui Meu este ca oricine vede pe Fiul și crede în El să aibă viața veșnică. <span class="reference">(Ioan 6:40)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_5" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_5" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>6. Cine primește mărturia Lui adeverește prin aceasta că Dumnezeu spune adevărul. <span class="reference">(Ioan 3:33)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_6" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_6" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>7. Dacă Mă iubește cineva, va păzi cuvântul Meu, și Tatăl Meu îl va proslăvi. <span class="reference">(Ioan 14:23)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_7" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_7" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>8. Până acum n-ați cerut nimic în Numele Tatălui: cereți și veți căpăta. <span class="reference">(Ioan 16:24)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_8" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_8" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>9. Unul din preoții cei mai de seamă a dat o palmă lui Isus. <span class="reference">(Ioan 18:22)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_9" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_9" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>10. Când s-au coborât ucenicii pe țărm au văzut acolo jăratic de cărbuni, pește pus deasupra și pâine. <span class="reference">(Ioan 21:9)</span></p>
+            <div class="tf-options">
+                <label><input type="radio" name="q1_10" value="true"> Adevărat</label>
+                <label><input type="radio" name="q1_10" value="false"> Fals</label>
+            </div>
+        </div>
+
+        <!-- SECTION II: MULTIPLE CHOICE (single answer) -->
+        <h2>II. Alegeți litera corespunzătoare răspunsului corect <span class="points">(4p fiecare)</span></h2>
+
+        <div class="question">
+            <p>1. În care timp al zilei s-a dus Maria Magdalena la mormântul lui Isus? <span class="reference">(Ioan 20:1)</span></p>
+            <label><input type="radio" name="q2_1" value="a"> a. seara;</label>
+            <label><input type="radio" name="q2_1" value="b"> b. dis-de-dimineață;</label>
+            <label><input type="radio" name="q2_1" value="c"> c. spre noapte.</label>
+        </div>
+
+        <div class="question">
+            <p>2. Cine i-a împletit lui Isus o cunună de spini? <span class="reference">(Ioan 19:2)</span></p>
+            <label><input type="radio" name="q2_2" value="a"> a. ostașii;</label>
+            <label><input type="radio" name="q2_2" value="b"> b. aprozii;</label>
+            <label><input type="radio" name="q2_2" value="c"> c. robii marelui preot.</label>
+        </div>
+
+        <div class="question">
+            <p>3. Cine a dat iudeilor sfatul: „Este de folos să moară un singur om pentru norod."? <span class="reference">(Ioan 11:50)</span></p>
+            <label><input type="radio" name="q2_3" value="a"> a. Pilat;</label>
+            <label><input type="radio" name="q2_3" value="b"> b. Ana;</label>
+            <label><input type="radio" name="q2_3" value="c"> c. Caiafa.</label>
+        </div>
+
+        <div class="question">
+            <p>4. Ce spune Scriptura în legătură cu „Cel ce mănâncă pâine cu Mine"? <span class="reference">(Ioan 13:18)</span></p>
+            <label><input type="radio" name="q2_4" value="a"> a. M-a vândut;</label>
+            <label><input type="radio" name="q2_4" value="b"> b. a ridicat mâna împotriva Mea;</label>
+            <label><input type="radio" name="q2_4" value="c"> c. a ridicat călcâiul împotriva Mea.</label>
+        </div>
+
+        <div class="question">
+            <p>5. Nu voi mai vorbi mult cu voi, căci vine: <span class="reference">(Ioan 14:30)</span></p>
+            <label><input type="radio" name="q2_5" value="a"> a. stăpânitorul lumii acesteia;</label>
+            <label><input type="radio" name="q2_5" value="b"> b. judecătorul lumii acesteia;</label>
+            <label><input type="radio" name="q2_5" value="c"> c. Mângâietorul lumii acesteia.</label>
+        </div>
+
+        <div class="question">
+            <p>6. Nu te teme fiică ………………..; iată că Împăratul tău vine călare pe mânzul unei măgărițe. <span class="reference">(Ioan 12:15)</span></p>
+            <label><input type="radio" name="q2_6" value="a"> a. Ierusalimului;</label>
+            <label><input type="radio" name="q2_6" value="b"> b. Sionului;</label>
+            <label><input type="radio" name="q2_6" value="c"> c. Capernaumului.</label>
+        </div>
+
+        <div class="question">
+            <p>7. La ce distanță era Ierusalimul de Betania? <span class="reference">(Ioan 11:18)</span></p>
+            <label><input type="radio" name="q2_7" value="a"> a. 25 de stadii;</label>
+            <label><input type="radio" name="q2_7" value="b"> b. 15 stadii;</label>
+            <label><input type="radio" name="q2_7" value="c"> c. 30 de stadii.</label>
+        </div>
+
+        <div class="question">
+            <p>8. Iudeii L-au înconjurat pe Isus și I-au zis: Până când ne tot ții sufletele în …………..? <span class="reference">(Ioan 10:24)</span></p>
+            <label><input type="radio" name="q2_8" value="a"> a. certitudine;</label>
+            <label><input type="radio" name="q2_8" value="b"> b. așteptare;</label>
+            <label><input type="radio" name="q2_8" value="c"> c. încordare.</label>
+        </div>
+
+        <div class="question">
+            <p>9. Câte zile a rămas Isus la samariteni? <span class="reference">(Ioan 4:40)</span></p>
+            <label><input type="radio" name="q2_9" value="a"> a. două zile;</label>
+            <label><input type="radio" name="q2_9" value="b"> b. trei zile;</label>
+            <label><input type="radio" name="q2_9" value="c"> c. câteva zile.</label>
+        </div>
+
+        <div class="question">
+            <p>10. Am văzut Duhul coborându-se din cer ca un ………………. și oprindu-se peste El: <span class="reference">(Ioan 1:32)</span></p>
+            <label><input type="radio" name="q2_10" value="a"> a. porumbel;</label>
+            <label><input type="radio" name="q2_10" value="b"> b. vultur;</label>
+            <label><input type="radio" name="q2_10" value="c"> c. nor.</label>
+        </div>
+
+        <!-- SECTION III: MATCHING -->
+        <h2>III. Faceți asocierea dintre coloane <span class="points">(2p fiecare)</span></h2>
+
+        <div class="matching-section">
+            <div class="matching-item">
+                <span class="match-text">1. Când ucenicii au rămas la Isus era</span>
+                <span class="match-ref">(Ioan 1:39)</span>
+                <select name="q3_1">
+                    <option value="">-- Alegeți --</option>
+                    <option value="a">a. ceasul al șaselea</option>
+                    <option value="b">b. ziua Sabatului</option>
+                    <option value="c">c. cea dintâi zi a săptămânii</option>
+                    <option value="d">d. ceasul al șaptelea</option>
+                    <option value="e">e. cam pe la ceasul al zecelea</option>
+                </select>
+            </div>
+
+            <div class="matching-item">
+                <span class="match-text">2. Când pe copilul slujbașului l-au lăsat frigurile era</span>
+                <span class="match-ref">(Ioan 4:52)</span>
+                <select name="q3_2">
+                    <option value="">-- Alegeți --</option>
+                    <option value="a">a. ceasul al șaselea</option>
+                    <option value="b">b. ziua Sabatului</option>
+                    <option value="c">c. cea dintâi zi a săptămânii</option>
+                    <option value="d">d. ceasul al șaptelea</option>
+                    <option value="e">e. cam pe la ceasul al zecelea</option>
+                </select>
+            </div>
+
+            <div class="matching-item">
+                <span class="match-text">3. Când stătea Isus la fântână era</span>
+                <span class="match-ref">(Ioan 4:6)</span>
+                <select name="q3_3">
+                    <option value="">-- Alegeți --</option>
+                    <option value="a">a. ceasul al șaselea</option>
+                    <option value="b">b. ziua Sabatului</option>
+                    <option value="c">c. cea dintâi zi a săptămânii</option>
+                    <option value="d">d. ceasul al șaptelea</option>
+                    <option value="e">e. cam pe la ceasul al zecelea</option>
+                </select>
+            </div>
+
+            <div class="matching-item">
+                <span class="match-text">4. Când a mers Maria la mormânt era</span>
+                <span class="match-ref">(Ioan 20:1)</span>
+                <select name="q3_4">
+                    <option value="">-- Alegeți --</option>
+                    <option value="a">a. ceasul al șaselea</option>
+                    <option value="b">b. ziua Sabatului</option>
+                    <option value="c">c. cea dintâi zi a săptămânii</option>
+                    <option value="d">d. ceasul al șaptelea</option>
+                    <option value="e">e. cam pe la ceasul al zecelea</option>
+                </select>
+            </div>
+
+            <div class="matching-item">
+                <span class="match-text">5. Când l-a vindecat Isus pe slăbănog era</span>
+                <span class="match-ref">(Ioan 5:9)</span>
+                <select name="q3_5">
+                    <option value="">-- Alegeți --</option>
+                    <option value="a">a. ceasul al șaselea</option>
+                    <option value="b">b. ziua Sabatului</option>
+                    <option value="c">c. cea dintâi zi a săptămânii</option>
+                    <option value="d">d. ceasul al șaptelea</option>
+                    <option value="e">e. cam pe la ceasul al zecelea</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION IV: MULTIPLE CHOICE (multiple answers) -->
+        <h2>IV. Alegeți litera corespunzătoare răspunsului corect <span class="points">(5p fiecare)</span></h2>
+        <p style="color: #7f8c8d; font-style: italic; margin-left: 10px;">(poate fi unul, două sau trei răspunsuri corecte)</p>
+
+        <div class="question">
+            <p>1. Tuturor celor ce L-au primit, adică celor ce cred în Numele Lui, le-a dat dreptul să se facă copii ai lui Dumnezeu, născuți: <span class="reference">(Ioan 1:12-13)</span></p>
+            <label><input type="checkbox" name="q4_1" value="a"> a. nu din sânge;</label>
+            <label><input type="checkbox" name="q4_1" value="b"> b. nici din voia firii lor, nici din voia vreunui om;</label>
+            <label><input type="checkbox" name="q4_1" value="c"> c. ci din Dumnezeu.</label>
+        </div>
+
+        <div class="question">
+            <p>2. Pilat a zis iudeilor despre Isus: <span class="reference">(Ioan 18:31)</span></p>
+            <label><input type="checkbox" name="q4_2" value="a"> a. luați-L voi;</label>
+            <label><input type="checkbox" name="q4_2" value="b"> b. judecați-L după Legea voastră;</label>
+            <label><input type="checkbox" name="q4_2" value="c"> c. faceți ce vreți cu El.</label>
+        </div>
+
+        <div class="question">
+            <p>3. Tot așa și voi acum sunteți plini de întristare, dar: <span class="reference">(Ioan 16:22)</span></p>
+            <label><input type="checkbox" name="q4_3" value="a"> a. Eu vă voi vedea iarăși;</label>
+            <label><input type="checkbox" name="q4_3" value="b"> b. inima vi se va bucura;</label>
+            <label><input type="checkbox" name="q4_3" value="c"> c. nimeni nu va răpi bucuria voastră.</label>
+        </div>
+
+        <button type="button" id="submitBtn" onclick="gradeQuiz()">📝 SUBMIT - Verifică Răspunsurile</button>
+    </form>
+
+    <div id="results">
+        <div id="scoreDisplay"></div>
+        <div id="detailedResults"></div>
+        <button id="resetBtn" onclick="resetQuiz()">🔄 Încearcă din nou</button>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            // Section I - True/False
+            q1_1: { answer: 'false', explanation: 'Mlădița neroditoare, nu roditoare', ref: 'Ioan 15:6' },
+            q1_2: { answer: 'true', explanation: '', ref: 'Ioan 17:25' },
+            q1_3: { answer: 'false', explanation: 'Dacă NU moare, rămâne singur', ref: 'Ioan 12:24' },
+            q1_4: { answer: 'true', explanation: '', ref: 'Ioan 7:18' },
+            q1_5: { answer: 'true', explanation: '', ref: 'Ioan 6:40' },
+            q1_6: { answer: 'true', explanation: '', ref: 'Ioan 3:33' },
+            q1_7: { answer: 'false', explanation: 'Tatăl Meu îl va iubi, nu proslăvi', ref: 'Ioan 14:23' },
+            q1_8: { answer: 'false', explanation: 'În Numele Meu, nu în Numele Tatălui', ref: 'Ioan 16:24' },
+            q1_9: { answer: 'false', explanation: 'Unul din slujitori/aprozi, nu din preoții cei mai de seamă', ref: 'Ioan 18:22' },
+            q1_10: { answer: 'true', explanation: '', ref: 'Ioan 21:9' },
+            
+            // Section II - Multiple Choice (single)
+            q2_1: { answer: 'b', text: 'b. dis-de-dimineață', ref: 'Ioan 20:1' },
+            q2_2: { answer: 'a', text: 'a. ostașii', ref: 'Ioan 19:2' },
+            q2_3: { answer: 'c', text: 'c. Caiafa', ref: 'Ioan 11:50' },
+            q2_4: { answer: 'c', text: 'c. a ridicat călcâiul împotriva Mea', ref: 'Ioan 13:18' },
+            q2_5: { answer: 'a', text: 'a. stăpânitorul lumii acesteia', ref: 'Ioan 14:30' },
+            q2_6: { answer: 'b', text: 'b. Sionului', ref: 'Ioan 12:15' },
+            q2_7: { answer: 'b', text: 'b. 15 stadii', ref: 'Ioan 11:18' },
+            q2_8: { answer: 'c', text: 'c. încordare', ref: 'Ioan 10:24' },
+            q2_9: { answer: 'a', text: 'a. două zile', ref: 'Ioan 4:40' },
+            q2_10: { answer: 'a', text: 'a. porumbel', ref: 'Ioan 1:32' },
+            
+            // Section III - Matching
+            q3_1: { answer: 'e', text: 'e. cam pe la ceasul al zecelea', ref: 'Ioan 1:39' },
+            q3_2: { answer: 'd', text: 'd. ceasul al șaptelea', ref: 'Ioan 4:52' },
+            q3_3: { answer: 'a', text: 'a. ceasul al șaselea', ref: 'Ioan 4:6' },
+            q3_4: { answer: 'c', text: 'c. cea dintâi zi a săptămânii', ref: 'Ioan 20:1' },
+            q3_5: { answer: 'b', text: 'b. ziua Sabatului', ref: 'Ioan 5:9' },
+            
+            // Section IV - Multiple Choice (multiple)
+            q4_1: { answer: ['a', 'b', 'c'], text: 'a, b, c (toate trei)', ref: 'Ioan 1:12-13', isMultiple: true },
+            q4_2: { answer: ['a', 'b'], text: 'a și b (luați-L voi; judecați-L după Legea voastră)', ref: 'Ioan 18:31', isMultiple: true },
+            q4_3: { answer: ['a', 'b', 'c'], text: 'a, b, c (toate trei)', ref: 'Ioan 16:22', isMultiple: true }
+        };
+
+        const points = {
+            section1: 2,
+            section2: 4,
+            section3: 2,
+            section4: 5
+        };
+
+        function getSelectedValue(name) {
+            const selected = document.querySelector(`input[name="${name}"]:checked`);
+            return selected ? selected.value : null;
+        }
+
+        function getSelectedValues(name) {
+            const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+            return Array.from(checkboxes).map(cb => cb.value).sort();
+        }
+
+        function getSelectValue(name) {
+            const select = document.querySelector(`select[name="${name}"]`);
+            return select ? select.value : null;
+        }
+
+        function arraysEqual(a, b) {
+            if (a.length !== b.length) return false;
+            const sortedA = [...a].sort();
+            const sortedB = [...b].sort();
+            return sortedA.every((val, idx) => val === sortedB[idx]);
+        }
+
+        function gradeQuiz() {
+            let totalScore = 0;
+            let maxScore = 0;
+            let results = [];
+            
+            // Section I - True/False (10 questions, 2 points each)
+            let section1Score = 0;
+            for (let i = 1; i <= 10; i++) {
+                const qName = `q1_${i}`;
+                const userAnswer = getSelectedValue(qName);
+                const correct = correctAnswers[qName];
+                const isCorrect = userAnswer === correct.answer;
+                
+                if (isCorrect) {
+                    section1Score += points.section1;
+                    totalScore += points.section1;
+                }
+                maxScore += points.section1;
+                
+                results.push({
+                    section: 'I',
+                    question: i,
+                    userAnswer: userAnswer ? (userAnswer === 'true' ? 'Adevărat' : 'Fals') : 'Necompletat',
+                    correctAnswer: correct.answer === 'true' ? 'Adevărat' : 'Fals',
+                    isCorrect: isCorrect,
+                    explanation: correct.explanation,
+                    ref: correct.ref,
+                    points: isCorrect ? points.section1 : 0,
+                    maxPoints: points.section1
+                });
+            }
+            
+            // Section II - Multiple Choice (10 questions, 4 points each)
+            let section2Score = 0;
+            for (let i = 1; i <= 10; i++) {
+                const qName = `q2_${i}`;
+                const correct = correctAnswers[qName];
+                let userAnswer, isCorrect;
+                
+                if (correct.isMultiple) {
+                    userAnswer = getSelectedValues(qName);
+                    isCorrect = arraysEqual(userAnswer, correct.answer);
+                    userAnswer = userAnswer.length > 0 ? userAnswer.join(', ') : 'Necompletat';
+                } else {
+                    userAnswer = getSelectedValue(qName);
+                    isCorrect = userAnswer === correct.answer;
+                    userAnswer = userAnswer || 'Necompletat';
+                }
+                
+                if (isCorrect) {
+                    section2Score += points.section2;
+                    totalScore += points.section2;
+                }
+                maxScore += points.section2;
+                
+                results.push({
+                    section: 'II',
+                    question: i,
+                    userAnswer: userAnswer,
+                    correctAnswer: correct.text,
+                    isCorrect: isCorrect,
+                    ref: correct.ref,
+                    points: isCorrect ? points.section2 : 0,
+                    maxPoints: points.section2
+                });
+            }
+            
+            // Section III - Matching (5 questions, 2 points each)
+            let section3Score = 0;
+            for (let i = 1; i <= 5; i++) {
+                const qName = `q3_${i}`;
+                const userAnswer = getSelectValue(qName);
+                const correct = correctAnswers[qName];
+                const isCorrect = userAnswer === correct.answer;
+                
+                if (isCorrect) {
+                    section3Score += points.section3;
+                    totalScore += points.section3;
+                }
+                maxScore += points.section3;
+                
+                results.push({
+                    section: 'III',
+                    question: i,
+                    userAnswer: userAnswer || 'Necompletat',
+                    correctAnswer: correct.text,
+                    isCorrect: isCorrect,
+                    ref: correct.ref,
+                    points: isCorrect ? points.section3 : 0,
+                    maxPoints: points.section3
+                });
+            }
+            
+            // Section IV - Multiple Choice/Multiple Answers (3 questions, 5 points each)
+            let section4Score = 0;
+            for (let i = 1; i <= 3; i++) {
+                const qName = `q4_${i}`;
+                const correct = correctAnswers[qName];
+                let userAnswer = getSelectedValues(qName);
+                const isCorrect = arraysEqual(userAnswer, correct.answer);
+                
+                if (isCorrect) {
+                    section4Score += points.section4;
+                    totalScore += points.section4;
+                }
+                maxScore += points.section4;
+                
+                results.push({
+                    section: 'IV',
+                    question: i,
+                    userAnswer: userAnswer.length > 0 ? userAnswer.join(', ') : 'Necompletat',
+                    correctAnswer: correct.text,
+                    isCorrect: isCorrect,
+                    ref: correct.ref,
+                    points: isCorrect ? points.section4 : 0,
+                    maxPoints: points.section4
+                });
+            }
+            
+            // Display results
+            const percentage = Math.round((totalScore / maxScore) * 100);
+            let scoreClass = 'score-needs-work';
+            let emoji = '📚';
+            
+            if (percentage >= 90) {
+                scoreClass = 'score-excellent';
+                emoji = '🏆';
+            } else if (percentage >= 70) {
+                scoreClass = 'score-good';
+                emoji = '👍';
+            }
+            
+            document.getElementById('scoreDisplay').className = scoreClass;
+            document.getElementById('scoreDisplay').innerHTML = `
+                ${emoji} Scor Final: ${totalScore} / ${maxScore} puncte (${percentage}%)
+                <div style="font-size: 16px; margin-top: 15px;">
+                    <div class="section-score">Secțiunea I (Adevărat/Fals): ${section1Score}/20 puncte</div>
+                    <div class="section-score">Secțiunea II (Alegere simplă): ${section2Score}/40 puncte</div>
+                    <div class="section-score">Secțiunea III (Asocieri): ${section3Score}/10 puncte</div>
+                    <div class="section-score">Secțiunea IV (Alegere multiplă): ${section4Score}/15 puncte</div>
+                </div>
+            `;
+            
+            // Detailed results
+            let detailedHTML = '<h3>Răspunsuri Detaliate:</h3>';
+            let currentSection = '';
+            
+            results.forEach(r => {
+                if (r.section !== currentSection) {
+                    currentSection = r.section;
+                    detailedHTML += `<h4 style="margin-top: 20px; color: #d35400;">Secțiunea ${currentSection}</h4>`;
+                }
+                
+                const statusClass = r.isCorrect ? 'answer-correct' : 'answer-incorrect';
+                const statusIcon = r.isCorrect ? '✅' : '❌';
+                
+                detailedHTML += `
+                    <div class="answer-review ${statusClass}">
+                        <strong>${statusIcon} Întrebarea ${r.question}</strong> 
+                        <span class="result-reference">(${r.ref})</span>
+                        <span style="float: right;">${r.points}/${r.maxPoints}p</span>
+                        <br>
+                        <span class="your-answer-text">Răspunsul tău: ${r.userAnswer}</span><br>
+                        <span class="correct-answer-text">Răspuns corect: ${r.correctAnswer}</span>
+                        ${r.explanation ? `<br><em style="color: #7f8c8d;">Explicație: ${r.explanation}</em>` : ''}
+                    </div>
+                `;
+            });
+            
+            document.getElementById('detailedResults').innerHTML = detailedHTML;
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('resetBtn').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+            
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function resetQuiz() {
+            document.getElementById('quizForm').reset();
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'none';
+            document.getElementById('submitBtn').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
